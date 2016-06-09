@@ -1,0 +1,16 @@
+body {
+    background-image: url("../img/bg.jpg");
+    font-family: "Times New Roman", Georgia, Serif;
+}
+
+.navbar{
+    font-family: sans-serif;
+}
+
+.loginform > h1{
+	font-size: 3vw;
+}
+
+.signupform > h1{
+	font-size: 3vw;
+}
