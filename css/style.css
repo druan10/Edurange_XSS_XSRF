@@ -1,6 +1,6 @@
 body {
     background-image: url("../img/bg.jpg");
-    font-family: sans-serif;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 .logo {
@@ -19,3 +19,25 @@ body {
 	font-size: 8vw;
 }
 
+.main{
+    background-color:white;
+    border-radius: 5px;
+}
+
+.main > h1{
+    text-decoration: underline;
+    font-family: 
+}
+
+#postsubmit{
+    margin-top:5px;
+    margin-bottom:5px;
+    float:right;
+}
+
+.userpost{
+    padding:5px;
+    margin:7px;
+    border-radius: 5px;
+    background-color: lightgray;
+}

@@ -53,38 +53,25 @@ function clearMessages(){
 function generatePosts(){
   #reads posts stored in profile txt file and outputs them as divs
   $profile = file("./profiles/".$_SESSION["username"].".txt");
-  $posts = [];
+  $indices = [];
   #find post identifiers
-  // for ($i=1;$i<count($profile)-1;$i++){
+  for ($i=1;$i<count($profile)-1;$i++){
     
-  //   if (substr($profile[$i],0,3)=="###"){
-  //     array_push($indices,$i+1);
-  //   }
-  // }
-  #generate post divs
-  $content="";
-  for ($i=1;$i<count($profile);$i++){
-
     if (substr($profile[$i],0,3)=="###"){
-      print($content);
-      if ($content!=""){ 
-        echo "<div class='userpost'>".$content."</div>";
-        $content="";
-      }
-    }else {
-      $content+=(string) nl2br($profile[$i]);
-      
-
+      array_push($indices,$i+1);
     }
-    // $content=$profile[$indices[0]];
-    // for ($j=$indices[$i];$j<count($profile);$j++){
-    //   if (substr($profile[$j],0,3)!="###"){
-    //     $content+=$profile[$j];
-    //   }else{
-    //     break;
-    //   }
-    // }
-    
+  }
+  #generate post divs
+  for ($i=0;$i<count($indices);$i++){
+    $content="";
+    for ($j=$indices[$i];$j<count($profile)-1;$j++){
+      if (substr($profile[$j],0,3)!="###"){
+        $content+=$profile[$j];
+      }else{
+        break;
+      }
+    }
+    echo "<div class='userpost'>".$content."</div>";
   }
   #print(nl2br($profile[$i]));
 }

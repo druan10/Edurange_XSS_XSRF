@@ -16,9 +16,13 @@ include 'common.php';
   </head>
   <body>
     <?php generateNavbar();?>
-  	<div class="container">
+  	<div class="container main">
+      <br>
+      <?php throwMessage();?>
       <h2 class="text-center">Welcome <?=$_SESSION["username"]?>!</h2>
-  	</div>
+      <!-- Generate posts -->
+      <?php generateFeed();?>
+    </div>
 
     <!--Google JQuery CDN-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>

@@ -1,9 +1,9 @@
 <?php
 include 'common.php';
-
+checkLoggedin("./user_home.php");
 #Check for login $_POST variables
-if (!isset($_SESSION["loggedin"])){
-  if (isset($_POST["loginorsignup"])){
+if (isset($_POST["loginorsignup"])){
+  if (isset($_POST["username"])&&$_POST["username"]!=""&&isset($_POST["pwd"])){
     if ($_POST["loginorsignup"]=="signup"){
       if (file_exists("./database/db.txt")){
         if (!userExists($_POST["username"])){
@@ -16,6 +16,8 @@ if (!isset($_SESSION["loggedin"])){
             fclose($db);
             $_SESSION["loggedin"]=true;
             $_SESSION["username"]=$user;
+            setupAccount();
+            $_SESSION["info"]="Successfully Created account!";
             redirect("./user_home.php");
           }else{
             $_SESSION["error"]="Passwords did not match";
@@ -35,15 +37,16 @@ if (!isset($_SESSION["loggedin"])){
             fclose($db);
             $_SESSION["loggedin"]=true;
             $_SESSION["username"]=$user;
+            setupAccount();
             redirect("./user_home.php");
         }
       }
     }else{
       checkCredentials();
     }
+  }else{
+    $_SESSION["Error"]="An error occurred. Please try again!";
   }
-}else{
-  redirect("./user_home.php");
 }
 
 function userExists($user){
@@ -73,6 +76,13 @@ function checkCredentials(){
   $_SESSION["error"]="Username or Password is incorrect. Try Again!";
 }
 
+function setupAccount(){
+  #Setup Account Profile
+  $profile=fopen("./profiles/".$_SESSION["username"].".txt","w");
+  fwrite($profile,date("m-d-Y").PHP_EOL);
+  fclose($profile);
+}
+
 ?>
 
 <!DOCTYPE HTML>
@@ -94,13 +104,9 @@ function checkCredentials(){
     <!--Display Errors-->
     <div class="container">
       <?php
-      if (isset($_SESSION["error"])){
-        echo "<div class='alert alert-danger'>
-              <strong>Error! </strong>".$_SESSION["error"]."
-              </div>";
-        unset($_SESSION["error"]);}?>
+      throwMessage();
+      ?>
     </div>
-      
     <!--Login/Sign up Form-->
   	<div class="container loginform">
   		<div class="well">
@@ -108,11 +114,11 @@ function checkCredentials(){
 			<form role="form" action="./login.php" method="post">
 				<div class="form-group">
 					<label for="username">Username:</label>
-					<input type="text" class="form-control" name="username" placeholder="Enter Username">
+					<input type="text" class="form-control" name="username" placeholder="Enter Username" required>
 				</div>
 				<div class="form-group">
 					<label for="pwd">Password:</label>
-					<input type="password" class="form-control" name="pwd" placeholder="Enter password">
+					<input type="password" class="form-control" name="pwd" placeholder="Enter password" required>
 				</div>
 				<div class="checkbox">
 					<label><input type="checkbox" name="checkbox"> Remember me</label>
@@ -122,22 +128,21 @@ function checkCredentials(){
 			</form>
   		</div>
 	</div>
-
   <div class="container signupform">
       <div class="well">
       <h2>Sign up</h2>
       <form role="form" action="./login.php" method="post">
         <div class="form-group">
           <label for="username">Username:</label>
-          <input type="text" class="form-control" name="username" placeholder="Enter Username">
+          <input type="text" class="form-control" name="username" placeholder="Enter Username" required>
         </div>
         <div class="form-group">
           <label for="pwd">Password:</label>
-          <input type="password" class="form-control" name="pwd" placeholder="Enter password">
+          <input type="password" class="form-control" name="pwd" placeholder="Enter password" required>
         </div>
         <div class="form-group">
           <label for="pwd">Confirm your Password:</label>
-          <input type="password" class="form-control" name="pwd2" placeholder="Retype your password">
+          <input type="password" class="form-control" name="pwd2" placeholder="Retype your password" required>
         </div>
         <div class="checkbox">
           <label><input type="checkbox" name="checkbox"> Remember me</label>
@@ -147,7 +152,6 @@ function checkCredentials(){
       </form>
       </div>
   </div>
-
     <!--Google JQuery CDN-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
