@@ -23,17 +23,25 @@ include 'common.php';
       <?php 
         throwMessage();
       ?>
-      <h2 class="text-center">Welcome <?=$_SESSION["username"]?>!</h2>
+      <h2 class="text-center">Temporary user's profile!</h2>
       <!-- Generate posts -->
       <?php 
-        #show last post, if it was succesfully posted
-        if (isset($_SESSION["posted"])&&($_SESSION["posted"]==true)){
-          $latestPost=file_get_contents(fetchPosts($_SESSION["username"])[0]);
+        #temporary code
+        if (isset($posts)){
+          unset($posts);
+        }
+        #fetchposts user parameter should be dynamic and be retrieved from a user get query after user has been authenticated
+        $posts=fetchPosts("tester");
+        #display user posts
+        foreach ($posts as $i){
+          $posttext=file_get_contents($i);
           echo "
-            <div class = 'container blogpost'>
-              <h2 class='text-center'>Your latest post</h2>".$latestPost."
-            </div>";
-      }
+            <div class='container blogpost'>
+              ".$posttext."
+            </div>
+          ";
+        }
+      
 
       ?>
     </div>

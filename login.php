@@ -5,6 +5,7 @@ checkLoggedin("./user_home.php");
 if (isset($_POST["loginorsignup"])){
   if (isset($_POST["username"])&&$_POST["username"]!=""&&isset($_POST["pwd"])){
     if ($_POST["loginorsignup"]=="signup"){
+      #SIGNUP
       if (file_exists("./database/db.txt")){
         if (!userExists($_POST["username"])){
           if ($_POST["pwd"]==$_POST["pwd2"]){
@@ -42,6 +43,7 @@ if (isset($_POST["loginorsignup"])){
         }
       }
     }else{
+      #LOGIN
       checkCredentials();
     }
   }else{
@@ -62,6 +64,7 @@ function userExists($user){
 }
 
 function checkCredentials(){
+  #need to update to check folders
   $db = file("./database/db.txt");
     for ($i=0;$i<count($db);$i++){
       $line = explode(";",$db[$i]);
@@ -78,7 +81,10 @@ function checkCredentials(){
 
 function setupAccount(){
   #Setup Account Profile
-  $profile=fopen("./profiles/".$_SESSION["username"].".txt","w");
+  mkdir("./profiles/".$_SESSION["username"]);
+
+
+  $profile=fopen("./profiles/".$_SESSION["username"]."/".$_SESSION["username"].".txt","w");
   fwrite($profile,date("m-d-Y").PHP_EOL);
   fclose($profile);
 }

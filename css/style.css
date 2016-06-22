@@ -35,9 +35,14 @@ body {
     float:right;
 }
 
-.userpost{
+.blogpost{
+    margin-left:auto;
+    margin-right:auto;
     padding:5px;
-    margin:7px;
+    margin-top:5px;
+    margin-bottom:5px;
     border-radius: 5px;
     background-color: lightgray;
+    width: 95%;
 }
+
