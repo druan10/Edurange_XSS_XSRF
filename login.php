@@ -64,7 +64,8 @@ function userExists($user){
 }
 
 function checkCredentials(){
-  #need to update to check folders
+
+#OLD CODE THAT USES DB FILE
   $db = file("./database/db.txt");
     for ($i=0;$i<count($db);$i++){
       $line = explode(";",$db[$i]);
@@ -82,8 +83,6 @@ function checkCredentials(){
 function setupAccount(){
   #Setup Account Profile
   mkdir("./profiles/".$_SESSION["username"]);
-
-
   $profile=fopen("./profiles/".$_SESSION["username"]."/".$_SESSION["username"].".txt","w");
   fwrite($profile,date("m-d-Y").PHP_EOL);
   fclose($profile);

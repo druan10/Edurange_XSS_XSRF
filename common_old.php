@@ -41,7 +41,8 @@ function throwMessage(){
         echo "<div class='alert alert-success'>
               <strong>Info: </strong>".$_SESSION["success"]."
               </div>";
-        unset($_SESSION["success"]);}
+        unset($_SESSION["success"]);
+      }
 }
 
 function clearMessages(){
@@ -50,34 +51,62 @@ function clearMessages(){
   unset($_SESSION["success"]);
 }
 
-function generatePosts(){
+function generatePostsOld(){
+  exit();
   #reads posts stored in profile txt file and outputs them as divs
   $profile = file("./profiles/".$_SESSION["username"].".txt");
-  $indices = [];
+  $posts = [];
   #find post identifiers
-  for ($i=1;$i<count($profile)-1;$i++){
-    
-    if (substr($profile[$i],0,3)=="###"){
-      array_push($indices,$i+1);
-    }
-  }
+  // for ($i=1;$i<count($profile)-1;$i++){
+  //   if (substr($profile[$i],0,3)=="###"){
+  //     array_push($indices,$i+1);
+  //   }
+  // }
   #generate post divs
-  for ($i=0;$i<count($indices);$i++){
-    $content="";
-    for ($j=$indices[$i];$j<count($profile)-1;$j++){
-      if (substr($profile[$j],0,3)!="###"){
-        $content+=$profile[$j];
-      }else{
-        break;
+  $content="";
+  for ($i=1;$i<count($profile);$i++){
+    if (substr($profile[$i],0,3)=="###"){
+      print($content);
+      if ($content!=""){ 
+        echo "<div class='userpost'>".$content."</div>";
+        $content="";
       }
+    }else {
+      $content+=(string) nl2br($profile[$i]);
+      
+
     }
-    echo "<div class='userpost'>".$content."</div>";
+    // $content=$profile[$indices[0]];
+    // for ($j=$indices[$i];$j<count($profile);$j++){
+    //   if (substr($profile[$j],0,3)!="###"){
+    //     $content+=$profile[$j];
+    //   }else{
+    //     break;
+    //   }
+    // }
+    
   }
   #print(nl2br($profile[$i]));
 }
 
+//show posts by age
+function fetchPosts($user){
+  $files = glob("./profiles/".$user."/*.txt");
+  $posts = [];
+  foreach ($files as $i){
+    if (preg_match("/\.\/profiles\/".$user."\/".$user."\-\d{2}\-\d{2}\-\d{4}\-\d{2}\-\d{2}\-\d{2}.txt/",$i)) {
+         array_push($posts, $i);
+     }
+  } 
+  //Get array in order from latest to oldest
+  $posts = array_reverse($posts);
+  return $posts;
+}
+
+#test\-\d{2}\-\d{2}\-\d{4}\-\d{2}\-\d{2}\-\d{2}(\.txt)
 function generateNavbar(){
-	echo "<nav class='navbar navbar-default'>
+  ?>
+    <nav class='navbar navbar-default'>
       <div class='container-fluid'>
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class='navbar-header'>
@@ -89,32 +118,31 @@ function generateNavbar(){
           </button>
           <a class='navbar-brand' href='./index.php'>EduRange</a>
         </div>
-
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>";
+      <div class='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>
+  <?php
     #If user is logged in, add option to write new post
 	if (isset($_SESSION['username'])){
-		echo "<ul class='nav navbar-nav'>
+		?>
+      <ul class='nav navbar-nav'>
 			<li><a href='./writepost.php'>New Post</a></li>
-			</ul>";}
+			</ul>
+    <?php}
 		echo "
 			<ul class='nav navbar-nav navbar-right'>
-            <!--<li><a href='#'>Link</a></li>-->
-            <li class='dropdown'>
-              <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'> Me <span class='caret'></span></a>
-              <ul class='dropdown-menu'>
-              	<!--
-              	#Sign out
-              	#Account Settings
-              	-->";
-              	if (!isset($_SESSION['username'])){
-                echo "<li><a href='./login.php'>Sign in</a></li>
-                <li><a href='#'>About This Site</a></li>";}else{
-                	echo "<li><a href='./logout.php'>Sign Out</a></li>
-                <li><a href='#'>About This Site</a></li>";}
-              echo "</ul>
-            </li>
-		</ul>
+        <li class='dropdown'>
+          <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'> Me <span class='caret'></span></a>
+          <ul class='dropdown-menu'>";
+          	if (!isset($_SESSION['username'])){
+            echo "
+              <li><a href='./login.php'>Sign in</a></li>
+              <li><a href='#'>About This Site</a></li>";}else{
+            	echo "<li><a href='#'>My Profile</a></li>
+              <li><a href='./logout.php'>Sign Out</a></li>
+              <li><a href='#'>About This Site</a></li>";}
+          echo "</ul>
+        </li>
+		  </ul>
 
           <form class='navbar-form navbar-right' role='search'>
             <div class='form-group'>
@@ -129,6 +157,10 @@ function generateNavbar(){
 
 function generateFeed(){
   print("Uh oh! You're not following anyone!");
+}
+
+function searchUsers($query){
+  
 }
 
 ?>

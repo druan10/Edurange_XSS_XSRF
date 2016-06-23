@@ -1,5 +1,8 @@
 <?php
 include 'common.php';
+if (!checkLoggedIn()){
+  redirect("./index.php");
+}
 ?>
 
 <!DOCTYPE HTML>
@@ -24,6 +27,11 @@ include 'common.php';
         throwMessage();
       ?>
       <h2 class="text-center">Temporary user's profile!</h2>
+      <!-- <div class="row">
+        <div class="col-sm-4" id="profilepic">
+          
+        </div>
+      </div> -->
       <!-- Generate posts -->
       <?php 
         #temporary code
@@ -31,7 +39,7 @@ include 'common.php';
           unset($posts);
         }
         #fetchposts user parameter should be dynamic and be retrieved from a user get query after user has been authenticated
-        $posts=fetchPosts("tester");
+        $posts=fetchPosts($_GET["username"]);
         #display user posts
         foreach ($posts as $i){
           $posttext=file_get_contents($i);

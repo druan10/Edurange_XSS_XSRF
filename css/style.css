@@ -42,7 +42,15 @@ body {
     margin-top:5px;
     margin-bottom:5px;
     border-radius: 5px;
-    background-color: lightgray;
+    background-color: #f3efef;
     width: 95%;
+}
+
+#profilepic{
+    border:groove;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-image: url("../img/default_avatar.gif");
 }
 

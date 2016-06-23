@@ -1,5 +1,8 @@
 <?php
 include 'common.php';
+if (!checkLoggedIn()){
+  redirect("./index.php");
+}
 ?>
 
 <!DOCTYPE HTML>
@@ -33,8 +36,8 @@ include 'common.php';
             <div class = 'container blogpost'>
               <h2 class='text-center'>Your latest post</h2>".$latestPost."
             </div>";
-      }
-
+          unset($_SESSION["posted"]);
+        }
       ?>
     </div>
 
