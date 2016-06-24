@@ -2,70 +2,15 @@
 include 'common.php';
 checkLoggedin("./user_home.php");
 #Check for login $_POST variables
-if (isset($_POST["loginorsignup"])){
-  if (isset($_POST["username"])&&$_POST["username"]!=""&&isset($_POST["pwd"])){
-    if ($_POST["loginorsignup"]=="signup"){
-      #SIGNUP
-      if (file_exists("./database/db.txt")){
-        if (!userExists($_POST["username"])){
-          if ($_POST["pwd"]==$_POST["pwd2"]){
-            $db = fopen("./database/db.txt", "a");
-            $user = (string) $_POST["username"];
-            $hash = (string) password_hash($_POST["pwd"], PASSWORD_DEFAULT);
-            $userinfo = $user . ";" . $hash . ";\n";
-            fwrite($db,$userinfo);
-            fclose($db);
-            $_SESSION["loggedin"]=true;
-            $_SESSION["username"]=$user;
-            setupAccount();
-            $_SESSION["info"]="Successfully Created account!";
-            redirect("./user_home.php");
-          }else{
-            $_SESSION["error"]="Passwords did not match";
-          }
-        }else{
-          $_SESSION["error"]="Username is Taken";
-        }
-      }else{
-        $db = fopen("./database/db.txt", "w");
-        fclose($db);
-        if ($_POST["pwd"]==$_POST["pwd2"]){
-          $db = fopen("./database/db.txt", "a");
-            $user = (string) $_POST["username"];
-            $hash = (string) password_hash($_POST["pwd"], PASSWORD_DEFAULT);
-            $userinfo = $user . ";" . $hash . ";\n";
-            fwrite($db,$userinfo);
-            fclose($db);
-            $_SESSION["loggedin"]=true;
-            $_SESSION["username"]=$user;
-            setupAccount();
-            redirect("./user_home.php");
-        }
-      }
-    }else{
-      #LOGIN
-      checkCredentials();
-    }
-  }else{
-    $_SESSION["Error"]="An error occurred. Please try again!";
-  }
-}
 
-function userExists($user){
-  $exists = false;
-  $db = file("./database/db.txt");
-    for ($i=0;$i<count($db);$i++){
-      $line = explode(";",$db[$i]);
-      if ($line[0]==$user){
-        $exists=true;
-      }
-  }
-  return $exists;
+if (isset($_POST["username"])&&$_POST["username"]!=""&&isset($_POST["pwd"])){
+  #LOGIN
+  checkCredentials();
+}else{
+  $_SESSION["Error"]="An error occurred. Please try again!";
 }
 
 function checkCredentials(){
-
-#OLD CODE THAT USES DB FILE
   $db = file("./database/db.txt");
     for ($i=0;$i<count($db);$i++){
       $line = explode(";",$db[$i]);
@@ -78,14 +23,6 @@ function checkCredentials(){
       }
     }
   $_SESSION["error"]="Username or Password is incorrect. Try Again!";
-}
-
-function setupAccount(){
-  #Setup Account Profile
-  mkdir("./profiles/".$_SESSION["username"]);
-  $profile=fopen("./profiles/".$_SESSION["username"]."/".$_SESSION["username"].".txt","w");
-  fwrite($profile,date("m-d-Y").PHP_EOL);
-  fclose($profile);
 }
 
 ?>
@@ -105,7 +42,7 @@ function setupAccount(){
   <body>
     <?php generateNavbar();?>
     <br>
-    <h1 class="text-center">Login/Sign up</h1>
+    <h1 class="text-center">Login</h1>
     <!--Display Errors-->
     <div class="container">
       <?php
@@ -125,43 +62,19 @@ function setupAccount(){
 					<label for="pwd">Password:</label>
 					<input type="password" class="form-control" name="pwd" placeholder="Enter password" required>
 				</div>
-				<div class="checkbox">
-					<label><input type="checkbox" name="checkbox"> Remember me</label>
-				</div>
         <input type="hidden" name="loginorsignup" value="login">
 				<button type="submit" class="btn btn-default">Submit</button>
 			</form>
-  		</div>
+		</div>
 	</div>
-  <div class="container signupform">
-      <div class="well">
-      <h2>Sign up</h2>
-      <form role="form" action="./login.php" method="post">
-        <div class="form-group">
-          <label for="username">Username:</label>
-          <input type="text" class="form-control" name="username" placeholder="Enter Username" required>
-        </div>
-        <div class="form-group">
-          <label for="pwd">Password:</label>
-          <input type="password" class="form-control" name="pwd" placeholder="Enter password" required>
-        </div>
-        <div class="form-group">
-          <label for="pwd">Confirm your Password:</label>
-          <input type="password" class="form-control" name="pwd2" placeholder="Retype your password" required>
-        </div>
-        <div class="checkbox">
-          <label><input type="checkbox" name="checkbox"> Remember me</label>
-        </div>
-        <input type="hidden" name="loginorsignup" value="signup">
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
-      </div>
+  <div class="container text-center">
+    <h3>New to EDURange Social?</h3>
+    <button type="button" class="btn btn-primary" id="signmeup">Sign up!</button>
   </div>
     <!--Google JQuery CDN-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="./loginform.js"></script>
   </body>
 </html>
-
-

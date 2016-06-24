@@ -1,6 +1,6 @@
 body {
     background-image: url("../img/bg.jpg");
-    font-family: "Times New Roman", Georgia, Serif;
+    font-family: Georgia, Serif;
 }
 
 .navbar{
@@ -13,4 +13,17 @@ body {
 
 .signupform > h1{
 	font-size: 3vw;
+}
+
+#pswd_info {
+	background-color: white;
+	border-radius:5px;
+}
+
+.fa-times {
+	color: red;
+}
+
+.fa-check {
+	color: green;
 }
