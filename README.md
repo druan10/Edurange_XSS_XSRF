@@ -2,7 +2,7 @@
 
 WIP scenario for Edurange aimed at demonstrating XSS and XSRF vulnerabilities.
 
-##TODO
+##CURRENT TODO LIST
 
 Add server side password complexity requirement validation
   users can still submit signup through post request and server will not validate password requirements
