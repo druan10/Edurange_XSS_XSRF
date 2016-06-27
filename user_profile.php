@@ -58,7 +58,13 @@ if (!checkLoggedIn()){
                 $posttext=file_get_contents($i);
                 ?>
                   <div class='container blogpost'>
-                    <?=$posttext?>
+                    <table>
+                      <tr>
+                        <td>
+                          <?=$posttext?>
+                        </td>
+                      </tr>
+                    </table>
                   </div>
                 <?php
               }

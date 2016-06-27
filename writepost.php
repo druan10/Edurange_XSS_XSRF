@@ -11,13 +11,16 @@ if (isset($_POST["newpost"])&&$_POST["newpost"]!=""){
       /**
         Basic html sanitizer WIP
       **/
-      $_POST["newpost"]=htmlentities($_POST["newpost"]);
+      
       // Blocked tags and attributes
       $blacklist = [
         '<script>','onblur', 'onchange', 'onclick', 'ondblclick', 'onfocus',
         'onkeydown', 'onkeypress', 'onkeyup', 'onload', 'onmousedown',
         'onmousemove', 'onmouseout','onmouseup',
         'onreset','onselect', 'onsubmit', 'onunload'];
+      $doc=new DOMDocument();
+      $doc->loadHTML($_POST["newpost"]);
+      $_POST["newpost"] = $doc->saveHTML();
 
       //If blocked tag is found, remove it
       foreach ($blacklist as $i){
