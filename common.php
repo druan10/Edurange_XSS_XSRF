@@ -2,7 +2,7 @@
 session_start();
 echo "<!--Created by David Ruan (2016)-->";
 #Needed for Demonstration Purposes, do not change this value
-header("X-XSS-Protection: 0"); 
+#header("X-XSS-Protection: 1; mode=block");
 
 function redirect($url){
   header("Location: ".$url); /* Redirect browser */
@@ -26,6 +26,7 @@ function checkLoggedIn(){
   }
 }
 
+// Generate div with appropriate error message
 function throwMessage(){
   if (isset($_SESSION["error"])){
         echo "<div class='alert alert-danger'>
@@ -45,51 +46,14 @@ function throwMessage(){
   }
 }
 
+// Clear message variables
 function clearMessages(){
   unset($_SESSION["error"]);
   unset($_SESSION["info"]);
   unset($_SESSION["success"]);
 }
 
-function generatePostsOld(){
-  exit();
-  #reads posts stored in profile txt file and outputs them as divs
-  $profile = file("./profiles/".$_SESSION["username"].".txt");
-  $posts = [];
-  #find post identifiers
-  // for ($i=1;$i<count($profile)-1;$i++){
-  //   if (substr($profile[$i],0,3)=="###"){
-  //     array_push($indices,$i+1);
-  //   }
-  // }
-  #generate post divs
-  $content="";
-  for ($i=1;$i<count($profile);$i++){
-    if (substr($profile[$i],0,3)=="###"){
-      print($content);
-      if ($content!=""){ 
-        echo "<div class='userpost'>".$content."</div>";
-        $content="";
-      }
-    }else {
-      $content+=(string) nl2br($profile[$i]);
-      
-
-    }
-    // $content=$profile[$indices[0]];
-    // for ($j=$indices[$i];$j<count($profile);$j++){
-    //   if (substr($profile[$j],0,3)!="###"){
-    //     $content+=$profile[$j];
-    //   }else{
-    //     break;
-    //   }
-    // }
-    
-  }
-  #print(nl2br($profile[$i]));
-}
-
-//show posts by age
+// Show posts ordered from latest > oldest
 function fetchPosts($user){
   $files = glob("./profiles/".$user."/*.txt");
   $posts = [];

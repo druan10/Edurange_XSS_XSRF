@@ -22,6 +22,7 @@ body {
 .main{
     background-color:white;
     border-radius: 5px;
+
 }
 
 .main > h1{
@@ -39,18 +40,28 @@ body {
     margin-left:auto;
     margin-right:auto;
     padding:5px;
-    margin-top:5px;
-    margin-bottom:5px;
+    margin-top:7px;
+    margin-bottom:7px;
     border-radius: 5px;
     background-color: #f3efef;
     width: 95%;
 }
 
-#profilepic{
-    border:groove;
-    overflow: hidden;
-    background-size: cover;
-    background-position: center;
-    background-image: url("../img/default_avatar.gif");
+.profile-content{
+    background-color: white;
 }
 
+.profile-sidebar{
+    background-color: lightgray;
+}
+
+.profile-sidebar > img{
+    max-width:100%;
+    height:auto;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.profile-page{
+    width:90%;
+}
