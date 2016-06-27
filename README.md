@@ -31,3 +31,6 @@ Create demo malicious profile
   create a sample malicious code on that page that does something like writes a post as the user being exploited
   "Samy" worm is a good example
 
+Create second version that enables the user's browser xss filter header.
+  header("X-XSS-Protection: 1"); //php command to enable this, this is the default
+  Can be used for a more difficult version of this scenario, for more experienced students
