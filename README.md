@@ -1,4 +1,4 @@
-# Edurange_XSS_XSRF
+# edurange_wvs
 
 WIP scenario for Edurange aimed at demonstrating XSS, content spoofing, XSRF, and other common web vulnerabilities
 
