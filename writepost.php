@@ -4,12 +4,30 @@ if (!checkLoggedIn()){
   redirect("./index.php");
 }
 
-#write posts to profile txt file
+// Save post as txt file
 if (isset($_POST["newpost"])&&$_POST["newpost"]!=""){
-    #Implement Broken Sanitation System
     if (strlen($_POST["newpost"])<=500){
+
+      /**
+        Basic html sanitizer WIP
+      **/
+      $_POST["newpost"]=htmlentities($_POST["newpost"]);
+      // Blocked tags and attributes
+      $blacklist = [
+        '<script>','onblur', 'onchange', 'onclick', 'ondblclick', 'onfocus',
+        'onkeydown', 'onkeypress', 'onkeyup', 'onload', 'onmousedown',
+        'onmousemove', 'onmouseout','onmouseup',
+        'onreset','onselect', 'onsubmit', 'onunload'];
+
+      //If blocked tag is found, remove it
+      foreach ($blacklist as $i){
+        $_POST["newpost"] = str_ireplace ($i, "", $_POST["newpost"]);
+      }
+
+      $blogpost = $_POST["newpost"];
+      // Write santized html to file
       $post = fopen("./profiles/".$_SESSION["username"]."/".$_SESSION["username"]."-".date("m-d-Y-H-i-s").".txt","a");
-      fwrite($post,$_POST["newpost"]);
+      fwrite($post,$blogpost);
       fclose($post);
       $_SESSION["success"]="Your new post was created successfully!";
       $_SESSION["posted"]=true;
@@ -33,10 +51,10 @@ if (isset($_POST["newpost"])&&$_POST["newpost"]!=""){
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
   </head>
   <body>
-    <?php generateNavbar();?>
+    <?php generateNavbar(); ?>
     <br>
     <div class="container main">
-      <?php throwMessage();?>
+      <?php throwMessage(); ?>
       <h1 class="text-center">Write a new post</h1>
       <p>Write a new post for your page!</p>
       <p>(NOTE: Basic html tags are supported! e.g &lt;h1&gt;,&lt;h2&gt;&lt;a&gt;,&lt;strong&gt;,etc...)</p>

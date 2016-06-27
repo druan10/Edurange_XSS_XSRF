@@ -104,11 +104,11 @@ function setupAccount(){
         </div>
         <div class="form-group">
           <label for="pwd">Password:</label>
-          <input type="password" class="form-control" id="pwd" name="pwd" maxlength="14" placeholder="Enter password" required>
+          <input type="password" class="form-control" id="pwd" name="pwd" maxlength="20" placeholder="Enter password" required>
         </div>
         <div class="form-group">
           <label for="pwd">Confirm your Password:</label>
-          <input type="password" class="form-control" name="pwd2" maxlength="14" placeholder="Retype your password" required>
+          <input type="password" class="form-control" name="pwd2" maxlength="20" placeholder="Retype your password" required>
         </div>
         <input type="hidden" name="loginorsignup" value="signup">
         <button type="submit" id="signupSubmit" class="btn btn-default">Submit</button>
@@ -121,7 +121,7 @@ function setupAccount(){
       <ul>
           <li><i class="fa fa-times" id="capital" aria-hidden="true"></i> At least <strong>one capital letter</strong></li>
           <li><i class="fa fa-times" id="number" aria-hidden="true"></i> At least <strong>one number</strong></li>
-          <li><i class="fa fa-times" id="length" aria-hidden="true"></i> At least <strong>8 characters long</strong></li>
+          <li><i class="fa fa-times" id="length" aria-hidden="true"></i> At least <strong>8 characters long</strong> (MAX 20 Characters)</li>
       </ul>
     </div>
   </div>

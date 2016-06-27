@@ -2,7 +2,7 @@
 session_start();
 echo "<!--Created by David Ruan (2016)-->";
 #Needed for Demonstration Purposes, do not change this value
-#header("X-XSS-Protection: 1; mode=block");
+header("X-XSS-Protection: 1; mode=block");
 
 function redirect($url){
   header("Location: ".$url); /* Redirect browser */
