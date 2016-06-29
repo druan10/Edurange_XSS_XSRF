@@ -4,8 +4,8 @@ WIP scenario for Edurange aimed at demonstrating XSS, content spoofing, XSRF, an
 
 ##CURRENT TODO LIST
 
-Add server side password complexity requirement validation
-  users can still submit signup through post request and server will not validate password requirements
+~~Add server side password complexity requirement validation
+users can still submit signup through post request and server will not validate password requirements~~
 
 Implement search function to find other users of the site if logged in
   Disable search function in navigation bar if not logged in
@@ -19,9 +19,10 @@ Finish user_profile.php page
     list of recent posts
     button to show more posts
     
-Implement insecure html sanitation
+Implement insecure html sanitation (Wip)
   basic html sanitation for students to try and break when they use the site as training
   Should enforce the need for proper html sanitation (probably shouldn't do it yourself)
+  (update) Works at a basic level using case insensitive string replace functions. Has some weird side effects and can be easily broken using malformed tags and attributes.
   
 Implement Get Request (content spoofing) vulnerability in search function
   GET variables are used to retrieve username on user_profile.php page.
