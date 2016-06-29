@@ -1,10 +1,13 @@
 <?php
 include 'common.php';
 checkLoggedin("./user_home.php");
-#Check for login $_POST variables
+// Check for signup post variables
 if (isset($_POST["username"])&&$_POST["username"]!=""&&isset($_POST["pwd"])){
-  if ($_POST["loginorsignup"]=="signup"){
-    #SIGNUP
+  // Check password requirements before continuing
+  // Requires 2 separate regular expression matches and a password length test
+  preg_match("/[A-Z]/", $_POST["pwd"],$capital);
+  preg_match("/\d/", $_POST["pwd"],$num);
+  if (count($capital)>0 && count($num)>0 && strlen($_POST["pwd"])>=8){
     if (file_exists("./database/db.txt")){
       if (!userExists($_POST["username"])){
         if ($_POST["pwd"]==$_POST["pwd2"]){
@@ -41,9 +44,6 @@ if (isset($_POST["username"])&&$_POST["username"]!=""&&isset($_POST["pwd"])){
           redirect("./user_home.php");
       }
     }
-  }else{
-    #LOGIN
-    checkCredentials();
   }
 }else{
   $_SESSION["Error"]="An error occurred. Please try again!";
@@ -110,7 +110,6 @@ function setupAccount(){
           <label for="pwd">Confirm your Password:</label>
           <input type="password" class="form-control" name="pwd2" maxlength="20" placeholder="Retype your password" required>
         </div>
-        <input type="hidden" name="loginorsignup" value="signup">
         <button type="submit" id="signupSubmit" class="btn btn-default">Submit</button>
       </form>
     </div>
