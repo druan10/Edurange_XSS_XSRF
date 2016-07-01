@@ -35,3 +35,7 @@ Create demo malicious profile
 Create second version that enables the user's browser xss filter header.
   header("X-XSS-Protection: 1"); //php command to enable this, this is the default
   Can be used for a more difficult version of this scenario, for more experienced students
+
+Fix lack of username & password sanitation
+  users can enter any characters for their username and anything for their password as long as it fulfills the requirements
+  Adding a ; to the username would break the password verification system as my code explodes lines on that character
