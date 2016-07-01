@@ -24,6 +24,10 @@ Implement insecure html sanitation (Wip)
   Should enforce the need for proper html sanitation (probably shouldn't do it yourself)
   (update) Works at a basic level using case insensitive string replace functions. Has some weird side effects and can be easily broken using malformed tags and attributes.
   
+Finish user_home.php page
+  Show other randomly selected users and (maybe) Their latest post.
+  Want a link to their profile (user_profile.php modified with GET request parameter)
+  
 Implement Get Request (content spoofing) vulnerability in search function
   GET variables are used to retrieve username on user_profile.php page.
   Should be able to include quotation marks to break out of regular GET request and insert reflected XSS
