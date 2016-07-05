@@ -1,75 +1,7 @@
 <?php
 include 'common.php';
 checkLoggedin("./user_home.php");
-// Check for signup post variables
-if (isset($_POST["username"])&&$_POST["username"]!=""&&isset($_POST["pwd"])){
-  // Check password requirements before continuing
-  // Requires 2 separate regular expression matches and a password length test
-  preg_match("/[A-Z]/", $_POST["pwd"],$capital);
-  preg_match("/\d/", $_POST["pwd"],$num);
-  if (count($capital)>0 && count($num)>0 && strlen($_POST["pwd"])>=8){
-    if (file_exists("./database/db.txt")){
-      if (!userExists($_POST["username"])){
-        if ($_POST["pwd"]==$_POST["pwd2"]){
-          $db = fopen("./database/db.txt", "a");
-          $user = (string) $_POST["username"];
-          $hash = (string) password_hash($_POST["pwd"], PASSWORD_DEFAULT);
-          $userinfo = $user . ";" . $hash . ";\n";
-          fwrite($db,$userinfo);
-          fclose($db);
-          $_SESSION["loggedin"]=true;
-          $_SESSION["username"]=$user;
-          setupAccount();
-          $_SESSION["info"]="Successfully Created account!";
-          redirect("./user_home.php");
-        }else{
-          $_SESSION["error"]="Passwords did not match";
-        }
-      }else{
-        $_SESSION["error"]="Username is Taken";
-      }
-    }else{
-      $db = fopen("./database/db.txt", "w");
-      fclose($db);
-      if ($_POST["pwd"]==$_POST["pwd2"]){
-        $db = fopen("./database/db.txt", "a");
-          $user = (string) $_POST["username"];
-          $hash = (string) password_hash($_POST["pwd"], PASSWORD_DEFAULT);
-          $userinfo = $user . ";" . $hash . ";\n";
-          fwrite($db,$userinfo);
-          fclose($db);
-          $_SESSION["loggedin"]=true;
-          $_SESSION["username"]=$user;
-          setupAccount();
-          redirect("./user_home.php");
-      }
-    }
-  }
-}else{
-  $_SESSION["Error"]="An error occurred. Please try again!";
-}
-
-
-function userExists($user){
-  $exists = false;
-  $db = file("./database/db.txt");
-    for ($i=0;$i<count($db);$i++){
-      $line = explode(";",$db[$i]);
-      if ($line[0]==$user){
-        $exists=true;
-      }
-  }
-  return $exists;
-}
-
-function setupAccount(){
-  #Setup Account Profile
-  mkdir("./profiles/".$_SESSION["username"]);
-  $profile=fopen("./profiles/".$_SESSION["username"]."/".$_SESSION["username"].".txt","w");
-  fwrite($profile,date("m-d-Y").PHP_EOL);
-  fclose($profile);
-}
-
+checkSignup();
 ?>
 
 <!DOCTYPE HTML>
@@ -100,7 +32,7 @@ function setupAccount(){
       <form role="form" action="./signup.php" method="post">
         <div class="form-group">
           <label for="username">Username:</label>
-          <input type="text" class="form-control" name="username" placeholder="Enter Username" required>
+          <input type="text" class="form-control" name="username" placeholder="Enter Username" maxlength="10" required>
         </div>
         <div class="form-group">
           <label for="pwd">Password:</label>

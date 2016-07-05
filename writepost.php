@@ -3,43 +3,7 @@ include 'common.php';
 if (!checkLoggedIn()){
   redirect("./index.php");
 }
-
-// Save post as txt file
-if (isset($_POST["newpost"])&&$_POST["newpost"]!=""){
-    if (strlen($_POST["newpost"])<=500){
-
-      /**
-        Basic html sanitizer WIP
-      **/
-      
-      // Blocked tags and attributes
-      $blacklist = [
-        '<script>','onblur', 'onchange', 'onclick', 'ondblclick', 'onfocus',
-        'onkeydown', 'onkeypress', 'onkeyup', 'onload', 'onmousedown',
-        'onmousemove', 'onmouseout','onmouseup',
-        'onreset','onselect', 'onsubmit', 'onunload'];
-      $doc=new DOMDocument();
-      $doc->loadHTML($_POST["newpost"]);
-      $_POST["newpost"] = $doc->saveHTML();
-
-      //If blocked tag is found, remove it
-      foreach ($blacklist as $i){
-        $_POST["newpost"] = str_ireplace ($i, "", $_POST["newpost"]);
-      }
-
-      $blogpost = $_POST["newpost"];
-      // Write santized html to file
-      $post = fopen("./profiles/".$_SESSION["username"]."/".$_SESSION["username"]."-".date("m-d-Y-H-i-s").".txt","a");
-      fwrite($post,$blogpost);
-      fclose($post);
-      $_SESSION["success"]="Your new post was created successfully!";
-      $_SESSION["posted"]=true;
-      redirect("./user_home.php");
-    }else{
-      $_SESSION["error"]="An error occurred. Please Try Again!";
-      redirect("./user_home.php");
-    }
-  }
+writePost();
 ?>
 
 <!DOCTYPE HTML>
@@ -60,7 +24,7 @@ if (isset($_POST["newpost"])&&$_POST["newpost"]!=""){
       <?php throwMessage(); ?>
       <h1 class="text-center">Write a new post</h1>
       <p>Write a new post for your page!</p>
-      <p>(NOTE: Basic html tags are supported! e.g &lt;h1&gt;,&lt;h2&gt;&lt;a&gt;,&lt;strong&gt;,etc...)</p>
+      <p>(NOTE: Basic html tags are supported! e.g &lt;h1&gt;,&lt;h2&gt;,&lt;a&gt;,&lt;strong&gt;,etc...</p>
       <form role="form" action="./writepost.php" method="post">
         <div class="form-group">
           <label for="post">Post: (limited to 500 characters)</label>

@@ -27,20 +27,23 @@ if (!checkLoggedIn()){
         throwMessage();
       ?>
       <h2 class="text-center">Welcome <?=$_SESSION["username"]?>!</h2>
-      <!-- Generate posts -->
-      <?php 
-        #show last post, if it was succesfully posted
-        if (isset($_SESSION["posted"])&&($_SESSION["posted"]==true)){
-          $latestPost=file_get_contents(fetchPosts($_SESSION["username"])[0]);
-          echo "
-            <div class = 'container blogpost'>
-              <h2 class='text-center'>Your latest post</h2>".$latestPost."
-            </div>";
-          unset($_SESSION["posted"]);
-        }
-      ?>
+      <!-- Quick Links -->
+      <button type="button" class="btn btn-default">My Profile</button>
+      <br>
+      <table>
+        <tr>
+          <td>
+            <?php
+              showLatestPost(); 
+            ?>
+          </td>
+        </tr>
+      </table>
     </div>
-
+    <br>
+    <div class="container main">
+        <h2 class="text-center" style="text-decoration:underline;">Other users!</h2>
+    </div>
     <!--Google JQuery CDN-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->

@@ -1,3 +1,4 @@
+<!-- Organize based on use -->
 <?php
 session_start();
 echo "<!--Created by David Ruan (2016)-->";
@@ -53,21 +54,7 @@ function clearMessages(){
   unset($_SESSION["success"]);
 }
 
-// Show posts ordered from latest > oldest
-function fetchPosts($user){
-  $files = glob("./profiles/".$user."/*.txt");
-  $posts = [];
-  foreach ($files as $i){
-    if (preg_match("/\.\/profiles\/".$user."\/".$user."\-\d{2}\-\d{2}\-\d{4}\-\d{2}\-\d{2}\-\d{2}.txt/",$i)) {
-         array_push($posts, $i);
-     }
-  } 
-  //Get array in order from latest to oldest
-  $posts = array_reverse($posts);
-  return $posts;
-}
 
-#test\-\d{2}\-\d{2}\-\d{4}\-\d{2}\-\d{2}\-\d{2}(\.txt)
 function generateNavbar(){
   ?>
   <!--Left side of Navbar-->
@@ -133,14 +120,218 @@ function generateFeed(){
   print("Uh oh! You're not following anyone!");
 }
 
-function searchUsers($query){
-  
+function checkCredentials(){
+  $db = file("./database/db.txt");
+    for ($i=0;$i<count($db);$i++){
+      $line = explode(";",$db[$i]);
+      if ($line[0]==$_POST["username"]){
+        if (password_verify($_POST["pwd"], $line[1])){
+          $_SESSION["loggedin"]=true;
+          $_SESSION["username"]=$_POST["username"];
+          redirect("./user_home.php");
+        }
+      }
+    }
+  $_SESSION["error"]="Username or Password is incorrect. Try Again!";
 }
 
-function fetchUserPhoto($user){
-  
+function userExists($user){
+  $exists = false;
+  $db = file("./database/db.txt");
+    for ($i=0;$i<count($db);$i++){
+      $line = explode(";",$db[$i]);
+      if ($line[0]==$user){
+        $exists=true;
+      }
+  }
+  return $exists;
 }
 
+function setupAccount(){
+  #Setup Account Profile
+  mkdir("./profiles/".$_SESSION["username"]);
+  $profile=fopen("./profiles/".$_SESSION["username"]."/".$_SESSION["username"].".txt","w");
+  fwrite($profile,date("m-d-Y").PHP_EOL);
+  fclose($profile);
+}
+
+function checkSignup(){
+  // Check for signup post variables
+  if (isset($_POST["username"])&&$_POST["username"]!=""&&isset($_POST["pwd"])){
+    // Check password requirements before continuing
+    // Requires 2 separate regular expression matches and a password length test
+    preg_match("/[A-Z]/", $_POST["pwd"],$capital);
+    preg_match("/\d/", $_POST["pwd"],$num);
+    if (count($capital)>0 && count($num)>0 && strlen($_POST["pwd"])>=8){
+      if (file_exists("./database/db.txt")){
+        if (!userExists($_POST["username"])){
+          if ($_POST["pwd"]==$_POST["pwd2"]){
+            $db = fopen("./database/db.txt", "a");
+            $user = (string) $_POST["username"];
+            $hash = (string) password_hash($_POST["pwd"], PASSWORD_DEFAULT);
+            $userinfo = $user . ";" . $hash . ";\n";
+            fwrite($db,$userinfo);
+            fclose($db);
+            $_SESSION["loggedin"]=true;
+            $_SESSION["username"]=$user;
+            setupAccount();
+            $_SESSION["info"]="Successfully Created account!";
+            redirect("./user_home.php");
+          }else{
+            $_SESSION["error"]="Passwords did not match";
+          }
+        }else{
+          $_SESSION["error"]="Username is Taken";
+        }
+      }else{
+        $db = fopen("./database/db.txt", "w");
+        fclose($db);
+        if ($_POST["pwd"]==$_POST["pwd2"]){
+          $db = fopen("./database/db.txt", "a");
+            $user = (string) $_POST["username"];
+            $hash = (string) password_hash($_POST["pwd"], PASSWORD_DEFAULT);
+            $userinfo = $user . ";" . $hash . ";\n";
+            fwrite($db,$userinfo);
+            fclose($db);
+            $_SESSION["loggedin"]=true;
+            $_SESSION["username"]=$user;
+            setupAccount();
+            redirect("./user_home.php");
+        }
+      }
+    }
+  }else{
+    $_SESSION["Error"]="An error occurred. Please try again!";
+  }
+}
+
+function checkLogin(){
+  #Check for login $_POST variables
+  if (isset($_POST["username"])&&$_POST["username"]!=""&&isset($_POST["pwd"])){
+    #LOGIN
+    checkCredentials();
+  }else{
+    $_SESSION["Error"]="An error occurred. Please try again!";
+  }
+}
+
+function showLatestPost(){
+  #show last post, if it was succesfully posted
+  if (isset($_SESSION["posted"])&&($_SESSION["posted"]==true)){
+    $latestPost=file_get_contents(fetchPosts($_SESSION["username"])[0]);
+    ?>
+      <div class = 'container blogpost'>
+        <h2 class='text-center'>Your latest post</h2><?=$latestPost?>
+      </div>
+    <?php
+    unset($_SESSION["posted"]);
+  }
+}
+
+function writePost(){
+  // Check for blog post submission in POST variables
+  // Save post as txt file
+  if (isset($_POST["newpost"])&&$_POST["newpost"]!=""){
+    // Make sure post isn't too long
+    if (strlen($_POST["newpost"])<=500){
+      // Sanitize html and save to a variable
+      $blogpost = sanitizeHtml($_POST["newpost"]);
+      // Write santized html to file
+      $post = fopen("./profiles/".$_SESSION["username"]."/".$_SESSION["username"]."-".date("m-d-Y-H-i-s").".txt","a");
+      fwrite($post,$blogpost);
+      fclose($post);
+      $_SESSION["success"]="Your new post was created successfully!";
+      $_SESSION["posted"]=true;
+      redirect("./user_home.php");
+    }else{
+      $_SESSION["error"]="An error occurred. Please Try Again!";
+      redirect("./user_home.php");
+    }
+  }
+}
+
+function sanitizeHtml($postText){
+  // Basic HTML sanitizer
+  // Blocked tags and attributes
+  $tagBlacklist = ['script'];
+  $attributeBlacklist = ['onblur', 'onchange', 'onclick', 'ondblclick', 'onfocus',
+    'onkeydown', 'onkeypress', 'onkeyup', 'onload', 'onmousedown',
+    'onmousemove', 'onmouseout','onmouseup',
+    'onreset','onselect', 'onsubmit', 'onunload'];
+  // blocked tags as visible html
+  $blockedStart=htmlentities("<blocked>");
+  $blockedEnd=htmlentities("</blocked>");
+  // If blocked tag is found, replace it with <blocked> tag. Uses case insensitive string replace function
+  foreach ($tagBlacklist as $i){
+    $postText = str_ireplace ("<".$i.">",$blockedStart, $postText);
+    $postText = str_ireplace ("</".$i.">",$blockedEnd, $postText);
+  }
+  // If blocked attribute is found IN THIS FORMAT, remove it.
+  foreach ($attributeBlacklist as $i){
+    $postText = str_ireplace ($i."=","blocked=", $postText);
+  }
+  return $postText;
+}
+
+function generateUserContent(){
+  // Reset user posts array to make sure posts are for the correct user
+  if (isset($userData)){
+    unset($userData);
+  }
+  // Fetch user posts  and assign them to the user posts array
+  $userPosts=fetchUserPosts($_GET["username"]);
+  // Generate user content
+  // If longer than 1, user has written posts
+  if (count($userData)>1){
+    ?>
+      <br>
+      <h2 class="text-center" style="text-decoration: underline;"><?=$_GET["username"]?>'s Latest Posts</h2>
+      <br>
+    <?php
+    // Generate divs for each user post, not including user data
+    foreach (array_slice($userData,1) as $i){
+      $posttext=file_get_contents($i);
+      ?>
+        <div class='container blogpost'>
+          <table>
+            <tr>
+              <td>
+                <?=$posttext?>
+              </td>
+            </tr>
+          </table>
+        </div>
+      <?php
+    }
+  }else{
+    ?>
+      <div class='container blogpost'>
+        <h2>You have no posts!</h2>
+      </div>
+    <?php
+  }
+}
+
+// Show posts ordered from latest > oldest
+function fetchUserPosts($user){
+  $userFile = glob("./profiles/".$user."/*.txt");
+  $data = [];
+  foreach ($userFile as $i){
+    if (preg_match("/\.\/profiles\/".$user."\/".$user."\-\d{2}\-\d{2}\-\d{4}\-\d{2}\-\d{2}\-\d{2}.txt/",$i)) {
+         array_push($data, $i);
+     }
+  } 
+  // Get array in order from latest to oldest
+  $data = array_reverse($data);
+  // Add user information to the front of the array
+  // Add Account Creation date to front of array
+  array_unshift($data, $userFile[0]);
+  return $data;
+}
+
+function fetchCreationDate($user){
+ return file("./profiles/".$user."/".$user.".txt")[0];
+}
 
 ?>
 

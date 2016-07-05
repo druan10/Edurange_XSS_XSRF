@@ -21,7 +21,6 @@ if (!checkLoggedIn()){
     <?php
       generateNavbar();
     ?>
-
     <div class="container-fluid profile-page">
       <div class="row">
         <?php 
@@ -29,53 +28,15 @@ if (!checkLoggedIn()){
         ?>
         <!-- Sidebar -->
         <div class="col-md-2 profile-sidebar visible-lg">
-          <img src="./img/default_avatar.gif">
+          <img id="profilepic" src="./img/default_avatar.gif">
           <ul>
-            <li>Thing 1</li>
-            <li>Thing 2</li>
-            <li>Thing 3</li>
-            <li>Thing 4</li>
+            <li>Joined - <?= fetchCreationDate($_GET["username"]); ?></li>
           </ul>
         </div>
         <!-- Main Content -->
         <div class="col-md-10 profile-content">
-          <!-- Fetch User Posts -->
           <?php
-            // Reset user posts array to ensure posts belong to the appropriate user
-            if (isset($posts)){
-              unset($posts);
-            }
-            // Fetch user posts and assign them to the user posts array
-            $posts=fetchPosts($_GET["username"]);
-            if (count($posts)>0){
-              ?>
-                <br>
-                <h2 class="text-center" style="text-decoration: underline;"><?=$_GET["username"]?>'s Latest Posts</h2>
-                <br>
-              <?php
-              // Generate divs for each user post
-              foreach ($posts as $i){
-                $posttext=file_get_contents($i);
-                ?>
-                  <div class='container blogpost'>
-                    <table>
-                      <tr>
-                        <td>
-                          <?=$posttext?>
-                        </td>
-                      </tr>
-                    </table>
-                  </div>
-                <?php
-              }
-            }else{
-              ?>
-                <div class='container blogpost'>
-                  <h2>You have no posts!</h2>
-                </div>
-              <?php
-            }
-
+            generateUserContent();
           ?>
         </div>
       </div>
