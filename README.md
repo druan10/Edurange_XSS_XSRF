@@ -45,3 +45,5 @@ Fix lack of username & password sanitation
   Adding a ; to the username would break the password verification system as my code explodes lines on that character
 
 Group functions in common.php file by their role, (signup related, gathering data, etc)
+
+Limit usernames to numbers, letters and underscores and length < 8
