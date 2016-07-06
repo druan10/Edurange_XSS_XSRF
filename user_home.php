@@ -21,6 +21,7 @@ if (!checkLoggedIn()){
     <?php
       generateNavbar();
     ?>
+
   	<div class="container main">
       <br>
       <?php 
