@@ -218,7 +218,7 @@ function checkLogin(){
 function showLatestPost(){
   #show last post, if it was succesfully posted
   if (isset($_SESSION["posted"])&&($_SESSION["posted"]==true)){
-    $latestPost=file_get_contents(fetchPosts($_SESSION["username"])[0]);
+    $latestPost=file_get_contents(fetchUserPosts($_SESSION["username"])[0]);
     ?>
       <div class = 'container blogpost'>
         <h2 class='text-center'>Your latest post</h2><?=$latestPost?>
@@ -278,8 +278,9 @@ function generateUserContent(){
   if (isset($userData)){
     unset($userData);
   }
+
   // Fetch user posts  and assign them to the user posts array
-  $userPosts=fetchUserPosts($_GET["username"]);
+  $userData=fetchUserPosts($_GET["username"]);
   // Generate user content
   // If longer than 1, user has written posts
   if (count($userData)>1){

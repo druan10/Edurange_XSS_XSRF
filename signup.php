@@ -32,7 +32,8 @@ checkSignup();
       <form role="form" action="./signup.php" method="post">
         <div class="form-group">
           <label for="username">Username:</label>
-          <input type="text" class="form-control" name="username" placeholder="Enter Username" maxlength="10" required>
+          <p id="usernameHelper">Only letters, numbers, & underscores. (Max length 10) <i class="fa fa-times" id="usernameReq" aria-hidden="true"></i></p>
+          <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" maxlength="10" required>
         </div>
         <div class="form-group">
           <label for="pwd">Password:</label>
@@ -40,7 +41,7 @@ checkSignup();
         </div>
         <div class="form-group">
           <label for="pwd">Confirm your Password:</label>
-          <input type="password" class="form-control" name="pwd2" maxlength="20" placeholder="Retype your password" required>
+          <input type="password" class="form-control" id="pwd2" name="pwd2" maxlength="20" placeholder="Retype your password" required>
         </div>
         <button type="submit" id="signupSubmit" class="btn btn-default">Submit</button>
       </form>
@@ -64,6 +65,6 @@ checkSignup();
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-    <script src="./checkPassReq.js"></script>
+    <script src="./checkReq.js"></script>
   </body>
 </html>

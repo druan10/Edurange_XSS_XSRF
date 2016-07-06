@@ -4,6 +4,8 @@ $(document).ready(function(){
 	var capital=false;
 	var number=false;
 	var length=false;
+	var usernameFormat=false;
+	var passwordsMatch=false;
 	$("#signupSubmit").attr('disabled', true);
 	$("#pswd_info").hide();
 	$('input[type=password]').keyup(function() {
@@ -34,10 +36,18 @@ $(document).ready(function(){
 		    $('#number').removeClass("fa-check").addClass("fa-times");
 		    number=false;
 		}
+		
+		var password = $("#pwd").val();
+    	var confirmPassword = $("#pwd2").val();
 
-		if (capital&&number&&length){
-			$("#signupSubmit").attr('disabled', false);
-		}
+	    if (password == confirmPassword){
+	    	passwordsMatch=true;
+	    }else{
+			passwordsMatch=false;
+	    }
+	        
+	    
+	    
 
 		}).focus(function() {
 		    $('#pswd_info').show();
@@ -50,5 +60,29 @@ $(document).ready(function(){
     	window.location.href = "./login.php";
     	$("#").removeClass("blue");
     });
+
+	$('#username').keyup(function() {
+	    // keyup code here
+	    var username = $("#username").val();
+	    if (username.match(/^[a-zA-Z0-9\_]{4,10}$/)){
+	    		usernameFormat=true;
+	    		$('#usernameReq').removeClass("fa-times").addClass("fa-check");
+	    	}else{
+    			usernameFormat=false
+	    		$('#usernameReq').removeClass("fa-check").addClass("fa-times");
+	    	}
+	    });
+	    
+
+	$('input').keyup(function() {
+		if (capital&&number&&length&&usernameFormat&&passwordsMatch){
+			$("#signupSubmit").attr('disabled', false);
+		}else{
+			$("#signupSubmit").attr('disabled', true);
+		}
+	});
+
 });
+
+
 
