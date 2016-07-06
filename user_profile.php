@@ -3,6 +3,13 @@ include 'common.php';
 if (!checkLoggedIn()){
   redirect("./index.php");
 }
+// Fetch user data in advance if user exists and assign it to a global variable.
+if (userExists($_GET["username"])){
+    global $userData;
+    $userData=fetchUserData($_GET["username"]);
+}else{
+    redirect("./user_home.php");
+  }
 ?>
 
 <!DOCTYPE HTML>
@@ -30,7 +37,7 @@ if (!checkLoggedIn()){
         <div class="col-md-2 profile-sidebar visible-lg">
           <img id="profilepic" src="./img/default_avatar.gif">
           <ul>
-            <li>Joined - <?= fetchCreationDate($_GET["username"]); ?></li>
+            <li>Joined - <?=$GLOBALS["userData"]["creationDate"]?></li>
           </ul>
         </div>
         <!-- Main Content -->
