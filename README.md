@@ -46,4 +46,6 @@ Fix lack of username & password sanitation
 
 Group functions in common.php file by their role, (signup related, gathering data, etc)
 
-Limit usernames to numbers, letters and underscores and length < 8
+~~Limit usernames to numbers, letters and underscores~~
+  Now checked for using javascript, still need to implement server side validation.
+
