@@ -45,9 +45,6 @@ $(document).ready(function(){
 	    }else{
 			passwordsMatch=false;
 	    }
-	        
-	    
-	    
 
 		}).focus(function() {
 		    $('#pswd_info').show();
@@ -72,7 +69,6 @@ $(document).ready(function(){
 	    		$('#usernameReq').removeClass("fa-check").addClass("fa-times");
 	    	}
 	    });
-	    
 
 	$('input').keyup(function() {
 		if (capital&&number&&length&&usernameFormat&&passwordsMatch){

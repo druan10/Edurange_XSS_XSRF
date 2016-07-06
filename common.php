@@ -229,23 +229,40 @@ function showLatestPost(){ // Show user's latest post if it was submitted succes
   }
 }
 
+function fetchUserData($user){ //Gather user data and add it to specially formatted array (Assumes user exists)
+  $userData=array(
+    "username" => $user,
+    "creationDate" => file("./profiles/".$user."/".$user.".txt")[0],
+    "bio" => "placeholder text",
+    "posts" => array(
+      )
+    );
+  // Add key value pairs for each post the user has made to the posts array inside the userData structure
+  $userFiles = glob("./profiles/".$user."/*.txt");
+  foreach ($userFiles as $i){
+    if (preg_match("/\.\/profiles\/".$user."\/".$user."\-\d{2}\-\d{2}\-\d{4}\s\d{2}\-\d{2}(am|pm)\.txt/",$i)) {
+         $userData["posts"][] = array(substr($i,-22,18),file_get_contents($i));
+     }
+  } 
+  return $userData;
+}
+
 function generateUserContent(){ // Display's user's posts on their profile
-  $userData=fetchUserPosts($_GET["username"]);
-  if (count($userData)>1){ // If longer than 1, user has written posts, userData[0]= account creation data
+  if (count($GLOBALS["userData"]["posts"])>0){ // Check if user has any posts
     ?>
       <br>
-      <h2 class="text-center" style="text-decoration: underline;"><?=$_GET["username"]?>'s Latest Posts</h2>
+      <h2 class="text-center" style="text-decoration: underline;"><?=$GLOBALS["userData"]["username"]?>'s Latest Posts</h2>
       <br>
     <?php
     // Generate divs for each user post, not including user data
-    foreach (array_slice($userData,1) as $i){
-      $posttext=file_get_contents($i);
+    foreach ($GLOBALS["userData"]["posts"] as $i){
       ?>
         <div class='container blogpost'>
+          <p style="text-decoration:underline"><?=$i[0]?></p>
           <table>
             <tr>
               <td>
-                <?=$posttext?>
+                <?=$i[1]?>
               </td>
             </tr>
           </table>
@@ -264,8 +281,9 @@ function generateUserContent(){ // Display's user's posts on their profile
 function fetchUserPosts($user){ // Gathers user's posts from the text files in their profile folder
   $userFile = glob("./profiles/".$user."/*.txt");
   $data = [];
+
   foreach ($userFile as $i){
-    if (preg_match("/\.\/profiles\/".$user."\/".$user."\-\d{2}\-\d{2}\-\d{4}\-\d{2}\-\d{2}\-\d{2}.txt/",$i)) {
+    if (preg_match("/\.\/profiles\/".$user."\/".$user."\-\d{2}\-\d{2}\-\d{4}\s\d{2}\-\d{2}(am|pm)\.txt/",$i)) {
          array_push($data, $i);
      }
   } 
@@ -277,12 +295,6 @@ function fetchUserPosts($user){ // Gathers user's posts from the text files in t
   return $data;
 }
 
-function fetchCreationDate($user){ // Gathers user's account creation date
- return file("./profiles/".$user."/".$user.".txt")[0];
-}
-
-// Blog Post functionality
-
 function writePost(){
   if (isset($_POST["newpost"])&&$_POST["newpost"]!=""){
     // Make sure post isn't too long
@@ -290,7 +302,7 @@ function writePost(){
       // Sanitize html and save to a variable
       $blogpost = sanitizeHtml($_POST["newpost"]);
       // Write santized html to file
-      $post = fopen("./profiles/".$_SESSION["username"]."/".$_SESSION["username"]."-".date("m-d-Y-H-i-s").".txt","a");
+      $post = fopen("./profiles/".$_SESSION["username"]."/".$_SESSION["username"]."-".date("m-d-Y h-ia").".txt","a");
       fwrite($post,$blogpost);
       fclose($post);
       $_SESSION["success"]="Your new post was created successfully!";

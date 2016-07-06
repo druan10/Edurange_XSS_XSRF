@@ -1,30 +1,7 @@
 <?php
 include 'common.php';
 checkLoggedin("./user_home.php");
-#Check for login $_POST variables
-
-if (isset($_POST["username"])&&$_POST["username"]!=""&&isset($_POST["pwd"])){
-  #LOGIN
-  checkCredentials();
-}else{
-  $_SESSION["Error"]="An error occurred. Please try again!";
-}
-
-function checkCredentials(){
-  $db = file("./database/db.txt");
-    for ($i=0;$i<count($db);$i++){
-      $line = explode(";",$db[$i]);
-      if ($line[0]==$_POST["username"]){
-        if (password_verify($_POST["pwd"], $line[1])){
-          $_SESSION["loggedin"]=true;
-          $_SESSION["username"]=$_POST["username"];
-          redirect("./user_home.php");
-        }
-      }
-    }
-  $_SESSION["error"]="Username or Password is incorrect. Try Again!";
-}
-
+checkLogin();
 ?>
 
 <!DOCTYPE HTML>
@@ -62,7 +39,6 @@ function checkCredentials(){
 					<label for="pwd">Password:</label>
 					<input type="password" class="form-control" name="pwd" placeholder="Enter password" maxlength="20" required>
 				</div>
-        <input type="hidden" name="loginorsignup" value="login">
 				<button type="submit" class="btn btn-default">Submit</button>
 			</form>
 		</div>
