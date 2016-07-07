@@ -35,7 +35,7 @@ if (!checkLoggedIn()){
         <tr>
           <td>
             <?php
-              showLatestPost(); 
+              // showLatestPost(); 
             ?>
           </td>
         </tr>
