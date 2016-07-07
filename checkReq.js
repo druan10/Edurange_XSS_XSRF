@@ -36,11 +36,8 @@ $(document).ready(function(){
 		    $('#number').removeClass("fa-check").addClass("fa-times");
 		    number=false;
 		}
-		
-		var password = $("#pwd").val();
-    	var confirmPassword = $("#pwd2").val();
 
-	    if (password == confirmPassword){
+	    if ($("#pwd").val() == $("#pwd2").val()){
 	    	passwordsMatch=true;
 	    }else{
 			passwordsMatch=false;

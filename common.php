@@ -94,8 +94,7 @@ function checkSignup(){
           $userinfo = $user . ";" . $hash . ";\n";
           fwrite($db,$userinfo);
           fclose($db);
-          $_SESSION["loggedin"]=true;
-          $_SESSION["username"]=$user;
+          $_SESSION["username"]=$_POST["username"];
           setupAccount();
           $_SESSION["info"]="Successfully Created account!";
           redirect("./user_home.php");
@@ -219,10 +218,11 @@ function generateFeed(){ // Deprecated (BUT STILL USED BECAUSE I'M AN EXCELLENT 
 
 function showLatestPost(){ // Show user's latest post if it was submitted successfully
   if (isset($_SESSION["posted"])&&($_SESSION["posted"]==true)){
-    $latestPost=file_get_contents(fetchUserPosts($_SESSION["username"])[0]);
+    
     ?>
       <div class = 'container blogpost'>
-        <h2 class='text-center'>Your latest post</h2><?=$latestPost?>
+        <h2 class='text-center'>Your latest post</h2>
+        <?php echo end(fetchUserData($_SESSION["username"])["posts"]) ?>
       </div>
     <?php
     unset($_SESSION["posted"]);
@@ -251,17 +251,29 @@ function generateUserContent(){ // Display's user's posts on their profile
   if (count($GLOBALS["userData"]["posts"])>0){ // Check if user has any posts
     ?>
       <br>
-      <h2 class="text-center" style="text-decoration: underline;"><?=$GLOBALS["userData"]["username"]?>'s Latest Posts</h2>
+      <h2 class="text-center" style="text-decoration: underline;"><?=$GLOBALS["userData"]["username"]?>'s Posts</h2>
       <br>
     <?php
     // Generate divs for each user post, not including user data
     foreach ($GLOBALS["userData"]["posts"] as $i){
       ?>
         <div class='container blogpost'>
-          <p style="text-decoration:underline"><?=$i[0]?></p>
+          <?php
+            // Allow user to delete posts if it's their account
+            if ($_SESSION["username"]==$_GET["username"]){
+              ?>
+            <p style="text-decoration:underline"><?=$i[0]?>
+              <a class="deletePost" href="#" style="float:right;color:red">
+                <i class="fa fa-times" aria-hidden="true"></i>
+              </a>
+            </p>
+              <?php
+            }
+          ?>
           <table>
             <tr>
               <td>
+                <!--User Post-->
                 <?=$i[1]?>
               </td>
             </tr>
@@ -281,7 +293,6 @@ function generateUserContent(){ // Display's user's posts on their profile
 function fetchUserPosts($user){ // Gathers user's posts from the text files in their profile folder
   $userFile = glob("./profiles/".$user."/*.txt");
   $data = [];
-
   foreach ($userFile as $i){
     if (preg_match("/\.\/profiles\/".$user."\/".$user."\-\d{2}\-\d{2}\-\d{4}\s\d{2}\-\d{2}(am|pm)\.txt/",$i)) {
          array_push($data, $i);

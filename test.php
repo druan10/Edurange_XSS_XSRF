@@ -1,4 +1,4 @@
 <?php
 include 'common.php';
-fetchUserData("druan10");
+print_r(fetchUserData("druan10"));
 ?>

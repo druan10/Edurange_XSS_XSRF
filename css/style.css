@@ -22,7 +22,6 @@ body {
 .main{
     background-color:white;
     border-radius: 5px;
-
 }
 
 .main > h1{
@@ -64,4 +63,11 @@ body {
 
 .profile-page{
     width:90%;
+}
+
+
+table{
+    margin-top:5px;
+    margin-bottom:5px;
+    width:100%;
 }
