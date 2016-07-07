@@ -95,6 +95,7 @@ function checkSignup(){
           fwrite($db,$userinfo);
           fclose($db);
           $_SESSION["username"]=$_POST["username"];
+          $_SESSION["loggedin"]=true;
           setupAccount();
           $_SESSION["info"]="Successfully Created account!";
           redirect("./user_home.php");
@@ -240,8 +241,8 @@ function fetchUserData($user){ //Gather user data and add it to specially format
   // Add key value pairs for each post the user has made to the posts array inside the userData structure
   $userFiles = glob("./profiles/".$user."/*.txt");
   foreach ($userFiles as $i){
-    if (preg_match("/\.\/profiles\/".$user."\/".$user."\-\d{2}\-\d{2}\-\d{4}\s\d{2}\-\d{2}(am|pm)\.txt/",$i)) {
-         $userData["posts"][] = array(substr($i,-22,18),file_get_contents($i));
+    if (preg_match("/\.\/profiles\/".$user."\/".$user."\-\d{2}\-\d{2}\-\d{4}\s\d{2}\-\d{2}(am|pm)\d{2}\.txt/",$i)) {
+         $userData["posts"][] = array(substr($i,-24,18),file_get_contents($i));
      }
   } 
   return $userData;
@@ -294,7 +295,7 @@ function fetchUserPosts($user){ // Gathers user's posts from the text files in t
   $userFile = glob("./profiles/".$user."/*.txt");
   $data = [];
   foreach ($userFile as $i){
-    if (preg_match("/\.\/profiles\/".$user."\/".$user."\-\d{2}\-\d{2}\-\d{4}\s\d{2}\-\d{2}(am|pm)\.txt/",$i)) {
+    if (preg_match("/\.\/profiles\/".$user."\/".$user."\-\d{2}\-\d{2}\-\d{4}\s\d{2}\-\d{2}(am|pm)\d{2}\.txt/",$i)) {
          array_push($data, $i);
      }
   } 
@@ -313,7 +314,7 @@ function writePost(){
       // Sanitize html and save to a variable
       $blogpost = sanitizeHtml($_POST["newpost"]);
       // Write santized html to file
-      $post = fopen("./profiles/".$_SESSION["username"]."/".$_SESSION["username"]."-".date("m-d-Y h-ia").".txt","a");
+      $post = fopen("./profiles/".$_SESSION["username"]."/".$_SESSION["username"]."-".date("m-d-Y h-ias").".txt","a");
       fwrite($post,$blogpost);
       fclose($post);
       $_SESSION["success"]="Your new post was created successfully!";

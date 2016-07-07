@@ -7,7 +7,7 @@ include 'common.php';
 		$userFiles = glob("./profiles/".$user."/*.txt");
 		$data = [];
 		foreach ($userFiles as $i){
-		if (preg_match("/\.\/profiles\/".$user."\/".$user."\-\d{2}\-\d{2}\-\d{4}\s\d{2}\-\d{2}(am|pm)\.txt/",$i)) {
+		if (preg_match("/\.\/profiles\/".$user."\/".$user."\-\d{2}\-\d{2}\-\d{4}\s\d{2}\-\d{2}(am|pm)\d{2}\.txt/",$i)) {
 		     array_push($data, $i);
 		 }
 		}
