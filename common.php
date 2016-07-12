@@ -7,6 +7,9 @@ echo "<!--Created by David Ruan (2016)-->";
 // Browser Cross Site Scripting Prevention
 header("X-XSS-Protection: 1; mode=block");
 
+//Time Zone
+date_default_timezone_set('America/Los_Angeles');
+
 // Page Redirection
 
 function redirect($url){

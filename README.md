@@ -36,7 +36,7 @@ Create demo malicious profile
   create a sample malicious code on that page that does something like writes a post as the user being exploited
   "Samy" worm is a good example
 
-Create second version that enables the user's browser xss filter header.
+Create second version that enables the user's browser xss filter header?
   header("X-XSS-Protection: 1"); //php command to enable this, this is the default
   Can be used for a more difficult version of this scenario, for more experienced students
 
@@ -49,3 +49,9 @@ Create second version that enables the user's browser xss filter header.
 ~~Limit usernames to numbers, letters and underscores
   Now checked for using javascript, still need to implement server side validation.~~
 
+Create Scoring System
+  Task based scoring?
+    Use X-Forwarding
+    Exploit XSS
+    Gain Admin Status (Server should not trust user content, Look at Gruyere)
+  
