@@ -32,9 +32,11 @@ Implement Get Request (content spoofing) vulnerability in search function
   GET variables are used to retrieve username on user_profile.php page.
   Should be able to include quotation marks to break out of regular GET request and insert reflected XSS
   
-Create demo malicious profile
+~~Create demo malicious profile
   create a sample malicious code on that page that does something like writes a post as the user being exploited
-  "Samy" worm is a good example
+  "Samy" worm is a good example~~
+  
+  User "notahacker" has this script on their profile @ ip/user_profile?username=notahacker
 
 Create second version that enables the user's browser xss filter header?
   header("X-XSS-Protection: 1"); //php command to enable this, this is the default
