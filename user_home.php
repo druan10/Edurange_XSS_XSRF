@@ -28,26 +28,35 @@ if (!checkLoggedIn()){
         throwMessage();
       ?>
       <h2 class="text-center">Welcome <?=$_SESSION["username"]?>!</h2>
-      <!-- Quick Links -->
-      <button type="button" class="btn btn-default">My Profile</button>
-      <br>
-      <table>
-        <tr>
-          <td>
-            <?php
-              // showLatestPost(); 
-            ?>
-          </td>
-        </tr>
-      </table>
     </div>
     <br>
     <div class="container main">
-        <h2 class="text-center" style="text-decoration:underline;">Other users!</h2>
+      <h1 class="text-center">Quick Links</h1>
+      <div class="row text-center">
+        <div class="col-sm-4 ">
+          <h3>Search for a user profile</h3>
+          <br>
+          <form action="#" class="home-item">
+            <input type="text"></input>
+            <input type="submit" value="Search">
+          </form>
+        </div>
+        <div class="col-sm-4 ">
+          <h3>View your profile</h3>
+          <a href='./user_profile.php?username=<?=$_SESSION["username"]?>'><i class="fa fa-user home-item quick-link fa-5x" aria-hidden="true"></i></a>
+          
+        </div>
+        <div class="col-sm-4 ">
+          <h3>Learn more about this site</h3>
+          <a href="./about.php"><i class="fa fa-info home-item quick-link fa-5x" aria-hidden="true"></i></a>
+        </div>
+      </div>
     </div>
+    <br>
     <!--Google JQuery CDN-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="quicklinks.js"></script>
   </body>
 </html>

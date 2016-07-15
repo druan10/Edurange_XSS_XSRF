@@ -1,23 +1,17 @@
 <?php
 
-// General
-
+// Maintains session status
 session_start();
 echo "<!--Created by David Ruan (2016)-->";
 // Browser Cross Site Scripting Prevention
 header("X-XSS-Protection: 1; mode=block");
-
-//Time Zone
 date_default_timezone_set('America/Los_Angeles');
 
-// Page Redirection
-
+// General Functions for the site
 function redirect($url){
   header("Location: ".$url); /* Redirect browser */
   exit();
 }
-
-// Helper Message Management
 
 function clearMessages(){ // Manually remove all error messages
   unset($_SESSION["error"]);
@@ -27,20 +21,22 @@ function clearMessages(){ // Manually remove all error messages
 
 function throwMessage(){ // Generates error messages
   if (isset($_SESSION["error"])){
-        echo "<div class='alert alert-danger'>
-              <strong>Error! </strong>".$_SESSION["error"]."
-              </div>";
-        unset($_SESSION["error"]);}
+    echo "<div class='alert alert-danger'>
+          <strong>Error! </strong>".$_SESSION["error"]."
+          </div>";
+    unset($_SESSION["error"]);
+  }
   if (isset($_SESSION["info"])){
-        echo "<div class='alert alert-info'>
-              <strong>Info: </strong>".$_SESSION["info"]."
-              </div>";
-        unset($_SESSION["info"]);}
+    echo "<div class='alert alert-info'>
+          <strong>Info: </strong>".$_SESSION["info"]."
+          </div>";
+    unset($_SESSION["info"]);
+  }
   if (isset($_SESSION["success"])){
-        echo "<div class='alert alert-success'>
-              <strong>Info: </strong>".$_SESSION["success"]."
-              </div>";
-        unset($_SESSION["success"]);
+    echo "<div class='alert alert-success'>
+          <strong>Info: </strong>".$_SESSION["success"]."
+          </div>";
+    unset($_SESSION["success"]);
   }
 }
 
@@ -84,23 +80,25 @@ function setupAccount(){ // Creates a directory and profile information text fil
 
 function checkSignup(){
   if (isset($_POST["username"])&&$_POST["username"]!=""&&isset($_POST["pwd"])){ // Check that required signup post variables exist
-    // Validate username and password requirement using regular expressions
-    preg_match("/[A-Z]/", $_POST["pwd"],$capital);
-    preg_match("/\d/", $_POST["pwd"],$num);
-    preg_match("/^[a-zA-Z0-9\_]{4,10}$/",$_POST["username"],$usernameReq);
+    // Make sure username and password meet format and complexity requirements using regular expressions
+    preg_match("/[A-Z]/", $_POST["pwd"],$capital); // Checks uppercase
+    preg_match("/\d/", $_POST["pwd"],$num); // Checks digits
+    preg_match("/^[a-zA-Z0-9\_]{4,10}$/",$_POST["username"],$usernameReq); // checks username requirements
     if (count($capital)>0 && count($num)>0 && count($usernameReq)>0 && strlen($_POST["pwd"])>=8){ // If regex tests are passed
       if (!userExists($_POST["username"])){ // If username isn't taken, continue
         if ($_POST["pwd"]==$_POST["pwd2"]){ // Check if submitted passwords's match
+          // Add User to database
           $db = fopen("./database/db.txt", "a");
           $user = (string) $_POST["username"];
           $hash = (string) password_hash($_POST["pwd"], PASSWORD_DEFAULT);
           $userinfo = $user . ";" . $hash . ";\n";
           fwrite($db,$userinfo);
           fclose($db);
+          // Update user session to logged in status
           $_SESSION["username"]=$_POST["username"];
           $_SESSION["loggedin"]=true;
-          setupAccount();
           $_SESSION["info"]="Successfully Created account!";
+          setupAccount();
           redirect("./user_home.php");
         }else{
           $_SESSION["error"]="Passwords did not match";
@@ -129,7 +127,7 @@ function checkLogin(){
         }
       }
     }
-    $_SESSION["error"]="Username or Password is incorrect. Try Again!";
+    $_SESSION["Error"]="Username or Password is incorrect. Try Again!";
   }else{
     $_SESSION["Error"]="An error occurred. Please try again!";
   }
@@ -197,13 +195,13 @@ function generateNavbar(){
           if (!isset($_SESSION['username'])){
           ?>
             <li><a href='./login.php'>Sign in</a></li>
-            <li><a href='#'>About This Site</a></li>
+            <li><a href='./about.php'>About This Site</a></li>
           <?php
           }else{
           ?>
             <li><a href='./user_profile.php?username=<?=$_SESSION["username"]?>'>My Profile</a></li>
             <li><a href='./logout.php'>Sign Out</a></li>
-            <li><a href='#'>About This Site</a></li>
+            <li><a href='./about.php'>About This Site</a></li>
           <?php
           }
           ?>
@@ -214,10 +212,6 @@ function generateNavbar(){
     </div><!-- /.container-fluid -->
   </nav>
   <?php
-}
-
-function generateFeed(){ // Deprecated (BUT STILL USED BECAUSE I'M AN EXCELLENT CODER :D)
-  print("Uh oh! You're not following anyone!");
 }
 
 function showLatestPost(){ // Show user's latest post if it was submitted successfully
@@ -331,4 +325,3 @@ function writePost(){
 }
 
 ?>
-
