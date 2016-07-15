@@ -1,7 +1,6 @@
 <?php
 include 'common.php';
 clearMessages();
-checkLoggedin("./user_home.php");
 ?>
 
 <!DOCTYPE HTML>
@@ -18,12 +17,26 @@ checkLoggedin("./user_home.php");
   </head>
   <body>
     <?php generateNavbar();?>
-  	<div class="container-fluid logo">
-		<h1 class="text-center">EduRange Social</h1>
-		<div class="login-prompt">
-			<a class="btn btn-default btn-lg" href="./login.php"> <i class="fa fa-user fa-lg"> </i> Log In / Sign Up</a>
-      <a class="btn btn-default btn-lg" href="./about.php"> <i class="fa fa-info fa-lg"> </i> About This Site</a>
-    </div>
+  	<div class="container main text-center">
+  		<h1>
+  			About this Site!
+  		</h1>
+  		<p>
+  			EDURange Social is a vulnerable web application. This site is modeled off of Google's "Gruyere" website.
+
+        Running on EDURange, you should have access to the site's server which you can ssh into.
+        Once there, ls to /var/www/html to find the site's source files. 
+        You have full read/write access to the files. If you can't figure out how to break the website, look at the code itself.
+  		</p>
+  		<h3>
+  			Tasks:
+  		</h3>
+  		<ul>
+  			<li>Sign up and try to inject a script into a blog post.</li>
+  			<li>Log in and check out user notahacker's profile. What is this profile doing?
+  			<a href="./user_profile.php?username=notahacker">notahacker's profile.</a></li>
+  			<li>Why wasn't this script caught by the html sanitizer? Fix it!</li>
+  		</ul>
   	</div>
     <!--Google JQuery CDN-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>

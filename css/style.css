@@ -22,12 +22,15 @@ body {
 .main{
     background-color:white;
     border-radius: 5px;
+    padding-bottom:10px;
 }
 
 .main > h1{
     text-decoration: underline;
     font-family: 
 }
+
+
 
 #postsubmit{
     margin-top:5px;
@@ -48,6 +51,7 @@ body {
 
 .profile-content{
     background-color: white;
+    padding-bottom:10px;
 }
 
 .profile-sidebar{
@@ -58,7 +62,6 @@ body {
     max-width:100%;
     height:auto;
     margin-top: 5%;
-    margin-bottom: 5%;
 }
 
 .profile-page{
@@ -70,4 +73,8 @@ table{
     margin-top:5px;
     margin-bottom:5px;
     width:100%;
+}
+
+.home-item{
+    padding:5%;
 }
